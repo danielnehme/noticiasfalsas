@@ -16,54 +16,67 @@
  https://creativecommons.org/licenses/by/4.0/deed.pt_BR
  ******************************************************
 '''
+import streamlit as st
+
+c =  st.container()
+
+col1, col2 = st.columns(2)
+
 # avisos que se repetem ao longo do programa
 def falsa():
-  print("\nA notícia pode ser falsa, cuidado!")
-
-def aviso():
-  print("\nComece novamente e digite apenas 's' ou 'n'.")
+    with col2:
+        st.write("**A notícia pode ser falsa, cuidado!**")
 
 # terceiro nível de ramos da árvore de decisão
 def nivel3_nao():
-  r3 = input("A notícia parece absurda?")
-  if(r3 == 's'): falsa()
-  elif(r3 =='n'): 
-    print("\nNa dúvida, não compartilhe!")
-  else: aviso() 
+	with col1:
+		if st.checkbox("A notícia parece absurda?"): 
+			falsa()
+		else:
+			with col2: 
+				st.write("**Na dúvida, não compartilhe!**")
 
 # segundo nível de ramos
 def nivel2_sim_1():
-  r21 = input("A data da publicação é recente?")
-  if(r21 == 's'): print("\nA notícia provavelmente é verdadeira, mesmo assim, revise para compartilhar.")
-  elif(r21 =='n'): print("\nA notícia pode ser verdadeira, mas na dúvida, não compartilhe!")
-  else: aviso() 
+	with col1:
+		if st.checkbox("A data da publicação é recente?"): 
+			with col2:
+				st.write("**A notícia provavelmente é verdadeira, mesmo assim, revise para compartilhar.**")
+		else: 
+			with col2: 
+				st.write("**A notícia pode ser verdadeira, mas na dúvida, não compartilhe!**")
 
 def nivel2_sim_2():
-  r22 = input("É um site de humor ou notícias falsas?")
-  if(r22 == 's'): falsa()
-  elif(r22 =='n'): nivel3_nao()
-  else: aviso()
+	with col1:
+		if st.checkbox("É um site de humor ou notícias falsas?"): 
+			falsa()
+		else: 
+			nivel3_nao()
 
 # ramos de primeiro nível
 def nivel1_sim():
-  r11 = input("Outras fontes confiáveis também publicaram?")
-  if(r11 == 's'): nivel2_sim_1()
-  elif(r11 =='n'): print("\nSe for verdade, outras fontes confiáveis vão publicar também. Aguarde!")
-  else: aviso() 
+    with col1:
+        if st.checkbox("Outras fontes confiáveis também publicaram?"): 
+            nivel2_sim_1()
+        else:
+            with col2:
+                st.write("**Se for verdade, outras fontes confiáveis vão publicar também. Aguarde!**")
 
 def nivel1_nao():
-  r12 = input("Algum outro site qualquer publicou?")
-  if(r12 == 's'): nivel2_sim_2()
-  elif(r12 =='n'): falsa()
-  else: aviso() 
+	with col1:
+		if st.checkbox("Algum outro site qualquer publicou?"): 
+			nivel2_sim_2()
+		else: 
+			falsa()
 
 # ************ Início do programa - raiz da árvore **************
-print("\nSISTEMA DE DIAGNÓSTICO DE NOTÍCIAS \n\n")
-print("Vamos ver se uma notícia é falsa! \n")
-print("Para cada questão, digite 's' para sim e 'n' para não. \n\n")
+c.title("\nSISTEMA DE DIAGNÓSTICO DE NOTÍCIAS \n\n")
+c.write("*Vamos ver se uma notícia é falsa!*")
+c.write("*Para cada questão, marque a que considerar pertinente.*\n\n")
 
-resp = input("A fonte da notícia é confiável?")
-if(resp == 's'): nivel1_sim()
-elif(resp =='n'): nivel1_nao()
-else: aviso() 
+with col1:
+	if st.checkbox("A fonte da notícia é confiável?"): 
+		nivel1_sim()
+	else: 
+		nivel1_nao()
 # ************ Fim do programa **********************************
